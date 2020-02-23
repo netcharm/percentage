@@ -11,7 +11,10 @@ namespace percentage
         static extern bool DestroyIcon(IntPtr handle);
 
         private const string iconFont = "Segoe UI";
-        private const int iconFontSize = 14;
+        private const int iconFontSize = 36;
+        private Font defaultFont = new Font(iconFont, iconFontSize);
+        private Color defaultFG = SystemColors.HighlightText;
+        private Color defaultBG = Color.Transparent;
 
         private string batteryPercentage;
         private NotifyIcon notifyIcon;
@@ -29,7 +32,7 @@ namespace percentage
             // initialize menuItem
             menuItem.Index = 0;
             menuItem.Text = "E&xit";
-            menuItem.Click += new System.EventHandler(menuItem_Click);
+            menuItem.Click += new EventHandler(menuItem_Click);
 
             notifyIcon.ContextMenu = contextMenu;
 
@@ -48,9 +51,11 @@ namespace percentage
             PowerStatus powerStatus = SystemInformation.PowerStatus;
             batteryPercentage = (powerStatus.BatteryLifePercent * 100).ToString();
 
-            using (Bitmap bitmap = new Bitmap(DrawText(batteryPercentage, new Font(iconFont, iconFontSize), Color.White, Color.Black)))
+            //using (Bitmap bitmap = new Bitmap(DrawText(batteryPercentage, new Font(iconFont, iconFontSize), Color.White, Color.Black)))
+            if (!(defaultFont is Font)) defaultFont = new Font(iconFont, iconFontSize);
+            using (Bitmap bitmap = new Bitmap(DrawText(batteryPercentage, defaultFont, defaultFG, defaultBG)))
             {
-                System.IntPtr intPtr = bitmap.GetHicon();
+                IntPtr intPtr = bitmap.GetHicon();
                 try
                 {
                     using (Icon icon = Icon.FromHandle(intPtr))
@@ -73,10 +78,10 @@ namespace percentage
             Application.Exit();
         }
 
-        private Image DrawText(String text, Font font, Color textColor, Color backColor)
+        private Image DrawText(string text, Font font, Color textColor, Color backColor)
         {
             var textSize = GetImageSize(text, font);
-            Image image = new Bitmap((int) textSize.Width, (int) textSize.Height);
+            Image image = new Bitmap((int) textSize.Width, (int) textSize.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             using (Graphics graphics = Graphics.FromImage(image))
             {
                 // paint the background
@@ -85,7 +90,7 @@ namespace percentage
                 // create a brush for the text
                 using (Brush textBrush = new SolidBrush(textColor))
                 {
-                    graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
                     graphics.DrawString(text, font, textBrush, 0, 0);
                     graphics.Save();
                 }
@@ -96,9 +101,15 @@ namespace percentage
 
         private static SizeF GetImageSize(string text, Font font)
         {
-            using (Image image = new Bitmap(1, 1))
-            using (Graphics graphics = Graphics.FromImage(image))
-                return graphics.MeasureString(text, font);
+            SizeF size = new SizeF(16, 16);
+            using (Image image = new Bitmap(48, 48))
+            {
+                using (Graphics graphics = Graphics.FromImage(image))
+                {
+                    size = graphics.MeasureString(text, font);
+                }
+            }
+            return (size);
         }
     }
 }
