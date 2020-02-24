@@ -210,6 +210,7 @@ namespace percentage
         private void menuItemSetting_Click(object sender, EventArgs e)
         {
             FormSetting dlg = new FormSetting() {
+                Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
                 TextColor = iconForeColor,
                 BackColor = iconBackColor,
                 FontName = iconFontName,
