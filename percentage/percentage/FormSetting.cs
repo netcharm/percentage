@@ -16,14 +16,14 @@ namespace percentage
         internal FontStyle FontStyle { get; set; } = FontStyle.Bold;
         internal float FontSize { get; set; } = 22.0F;
         internal Color TextColor { get; set; } = SystemColors.HighlightText;
-        internal Color BackColor { get; set; } = Color.Transparent;
+        internal Color BackgroundColor { get; set; } = Color.Transparent;
 
         internal void DrawSample()
         {
             lblFont.Text = "0.123456789";
             lblFont.Font = new Font(FontName, FontSize, FontStyle, GraphicsUnit.Point);
             lblFont.ForeColor = TextColor;
-            lblFont.BackColor = BackColor;
+            lblFont.BackColor = BackgroundColor;
         }
 
         public FormSetting()
@@ -40,7 +40,7 @@ namespace percentage
 
         private void btnBGDefault_Click(object sender, EventArgs e)
         {
-            BackColor = Color.Transparent;
+            BackgroundColor = Color.Transparent;
             DrawSample();
         }
 
@@ -66,10 +66,10 @@ namespace percentage
         private void btnBG_Click(object sender, EventArgs e)
         {
             ColorDialog dlg = new ColorDialog();
-            dlg.Color = BackColor;
+            dlg.Color = BackgroundColor;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                BackColor = dlg.Color;
+                BackgroundColor = dlg.Color;
                 DrawSample();
             }
         }

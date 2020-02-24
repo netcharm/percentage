@@ -212,7 +212,7 @@ namespace percentage
             FormSetting dlg = new FormSetting() {
                 Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
                 TextColor = iconForeColor,
-                BackColor = iconBackColor,
+                BackgroundColor = iconBackColor,
                 FontName = iconFontName,
                 FontSize = iconFontSize,
                 FontStyle = iconFontStyle
@@ -227,7 +227,7 @@ namespace percentage
                     iconFontSize = dlg.FontSize;
                     iconFontStyle = dlg.FontStyle;
                     iconForeColor = dlg.TextColor;
-                    iconBackColor = dlg.BackColor;
+                    iconBackColor = dlg.BackgroundColor;
                     SaveSetting();
                 }
                 catch(Exception)
